@@ -46,6 +46,10 @@ public class fcfsframe extends javax.swing.JFrame implements Runnable {
         
         int curr=0;
         int i=0;
+        
+        double tt=0;
+        double wt=0;
+        
         MyCanvas can=(MyCanvas)canvas1;
         while(i<arrivalTime.size()){
             System.out.println("b: "+burstTime.get(i));
@@ -53,6 +57,10 @@ public class fcfsframe extends javax.swing.JFrame implements Runnable {
             if(arrivalTime.get(i)<=curr){
                 System.out.println("11111111111111111");
                  curr+=burstTime.get(i);
+                 double tm=0;
+                 tm=curr-arrivalTime.get(i);
+                 wt+=tm-burstTime.get(i);
+                 tt+=tm;
                 finished.add(burstTime.get(i));
                 finid.add(id.get(i));
                 can.add(finished, finid);
@@ -64,9 +72,10 @@ public class fcfsframe extends javax.swing.JFrame implements Runnable {
                 i++;
             }else{
                 int temp1=0;
+                temp1=curr;
                 curr=arrivalTime.get(i);
                 temp1=curr-temp1;
-                System.out.println("22222222222222222222");
+                System.out.println("22222222222222222222: "+temp1);
                 finished.add(temp1);
                 finid.add("-1");
                 can.add(finished, finid);
@@ -76,8 +85,8 @@ public class fcfsframe extends javax.swing.JFrame implements Runnable {
                     Logger.getLogger(fcfsframe.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            jTextField1.setText(Double.toString(i));
-                jTextField2.setText(Double.toString(i));
+            jTextField1.setText(Double.toString(tt/(double)i));
+                jTextField2.setText(Double.toString(wt/(double)i));
         }
     }
     
