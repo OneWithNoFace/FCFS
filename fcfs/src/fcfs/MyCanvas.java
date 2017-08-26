@@ -6,6 +6,7 @@
 package fcfs;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -32,18 +33,35 @@ public class MyCanvas extends java.awt.Canvas {
         System.out.println("hksdfasdfas");
         int i=0;
         int currx=0,curry=0;
+        int curr=0;
         if(finished!=null){
             while(i<finished.size()){
+              Font f1 = new Font("Dialog", Font.PLAIN, 15);
+              g.setFont(f1);
+              g.setColor(Color.black);
+              g.drawLine(currx, 0, currx, 70);
+              g.drawString(Integer.toString(curr), currx+2, 65);
+              currx+=2;
+              Font f = new Font("Dialog", Font.PLAIN, 25);
+              g.setFont(f);
             if(finid.get(i).equals("-1")){
-                g.setColor(Color.black);
-                g.fillRect(currx, curry, 10*finished.get(i), 50);
+                g.setColor(Color.white);
+                g.fillRect(currx, curry, 30*finished.get(i), 50);
             }else{
                 g.setColor(Color.red);
-                g.fillRect(currx, curry, 10*finished.get(i), 50);
+                g.fillRect(currx, curry, 30*finished.get(i), 50);
+                g.setColor(Color.white);
+                g.drawString(finid.get(i), currx+(30*finished.get(i)/2)-10, 30);
             }
-            currx+=10*finished.get(i)+2;
+              curr+=finished.get(i);
+            currx+=30*finished.get(i)+2;
             i++;
         }
+            g.setColor(Color.black);
+            Font f1 = new Font("Dialog", Font.PLAIN, 15);
+            g.setFont(f1);
+             g.drawLine(currx, 0, currx, 70);
+            g.drawString(Integer.toString(curr), currx+2, 65);
         }
     }
 }
