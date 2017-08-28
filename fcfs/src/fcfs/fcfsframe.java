@@ -8,18 +8,15 @@ package fcfs;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Timer;
 
 /**
  *
  * @author harsh
  */
-public class fcfsframe extends javax.swing.JFrame {
+public class fcfsframe extends javax.swing.JFrame implements Runnable {
 
     /**
      * Creates new form fcfsframe
@@ -31,7 +28,7 @@ public class fcfsframe extends javax.swing.JFrame {
     }
     
     
-   /*public void run(){
+   public void run(){
         ArrayList<Integer> arrivalTime=new ArrayList<Integer>();
         ArrayList<Integer> burstTime=new ArrayList<Integer>();
         ArrayList<String> id=new ArrayList<String>();
@@ -91,7 +88,7 @@ public class fcfsframe extends javax.swing.JFrame {
             jTextField1.setText(Double.toString(tt/(double)i));
                 jTextField2.setText(Double.toString(wt/(double)i));
         }
-    }*/
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -265,72 +262,9 @@ public class fcfsframe extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    ArrayList<Integer> arrivalTime=new ArrayList<Integer>();
-        ArrayList<Integer> burstTime=new ArrayList<Integer>();
-        ArrayList<String> id=new ArrayList<String>();
-        
-        ArrayList<Integer> finished=new ArrayList<Integer>();
-        ArrayList<String> finid=new ArrayList<String>();
-        
-        
-        int curr=0;
-        int i=0;
-        int j=0;
-        int temp1=0;
-        int temp2=0;
-        
-        double tt=0;
-        double wt=0;
-         String s;
-        
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        jButton1.setEnabled(false);
-        curr=0;
-        temp1=0;
-        temp2=0;
-         MyCanvas can =(MyCanvas)canvas1;
-        int temp=jTable1.getRowCount();
-        for(int i=0;i<temp&&jTable1.getValueAt(i, 1)!=null;i++){
-            arrivalTime.add((Integer) jTable1.getValueAt(i, 1));
-            burstTime.add((Integer) jTable1.getValueAt(i, 2));
-            id.add((String) jTable1.getValueAt(i, 0));
-            //System.out.println("arr: "+arrivalTime.get(i));
-        }
-        if(curr<=arrivalTime.get(i)){
-            temp1=burstTime.get(i);
-            temp2=0;
-            s=id.get(i);
-            finished.add(temp2);
-            finid.add(s);
-            i++;
-        }
-        
-        Timer timer = new Timer(1000,new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                curr++;
-                temp1--;
-                temp2++;
-                if(temp1>=0){
-                    finished.set(i-1, temp2);
-                    can.add(finished, finid);
-                }
-                if(temp1<=0&&i<arrivalTime.size()&&arrivalTime.get(i)<=curr){
-                    temp1=burstTime.get(i);
-                    temp2=0;
-                    s=id.get(i);
-                    finished.add(temp2);
-                    finid.add(s);
-                    i++;
-                }
-               
-            }
-            
-        });
-        
-        timer.start();
-     this.setEnabled(true);
+        run();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
