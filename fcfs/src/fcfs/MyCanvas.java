@@ -36,6 +36,7 @@ public class MyCanvas extends java.awt.Canvas {
         int curr=0;
         if(finished!=null){
             while(i<finished.size()){
+                System.out.println("finid: "+finid.get(i));
               Font f1 = new Font("Dialog", Font.PLAIN, 15);
               g.setFont(f1);
               g.setColor(Color.black);

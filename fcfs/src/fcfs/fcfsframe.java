@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,67 +32,7 @@ public class fcfsframe extends javax.swing.JFrame {
     }
     
     
-   /*public void run(){
-        ArrayList<Integer> arrivalTime=new ArrayList<Integer>();
-        ArrayList<Integer> burstTime=new ArrayList<Integer>();
-        ArrayList<String> id=new ArrayList<String>();
-        
-        ArrayList<Integer> finished=new ArrayList<Integer>();
-        ArrayList<String> finid=new ArrayList<String>();
-        
-        int temp=jTable1.getRowCount();
-        for(int i=0;i<temp&&jTable1.getValueAt(i, 1)!=null;i++){
-            arrivalTime.add((Integer) jTable1.getValueAt(i, 1));
-            burstTime.add((Integer) jTable1.getValueAt(i, 2));
-            id.add((String) jTable1.getValueAt(i, 0));
-            //System.out.println("arr: "+arrivalTime.get(i));
-        }
-        
-        int curr=0;
-        int i=0;
-        
-        double tt=0;
-        double wt=0;
-        
-        MyCanvas can=(MyCanvas)canvas1;
-        while(i<arrivalTime.size()){
-            System.out.println("b: "+burstTime.get(i));
-             System.out.println("a: "+arrivalTime.get(i)+" ccurr: "+curr);
-            if(arrivalTime.get(i)<=curr){
-                System.out.println("11111111111111111");
-                 curr+=burstTime.get(i);
-                 double tm=0;
-                 tm=curr-arrivalTime.get(i);
-                 wt+=tm-burstTime.get(i);
-                 tt+=tm;
-                finished.add(burstTime.get(i));
-                finid.add(id.get(i));
-                can.add(finished, finid);
-                try {
-                    Thread.sleep(burstTime.get(i)*1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(fcfsframe.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                i++;
-            }else{
-                int temp1=0;
-                temp1=curr;
-                curr=arrivalTime.get(i);
-                temp1=curr-temp1;
-                System.out.println("22222222222222222222: "+temp1);
-                finished.add(temp1);
-                finid.add("-1");
-                can.add(finished, finid);
-                try {
-                    Thread.sleep(temp1*1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(fcfsframe.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            jTextField1.setText(Double.toString(tt/(double)i));
-                jTextField2.setText(Double.toString(wt/(double)i));
-        }
-    }*/
+   
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -198,6 +139,7 @@ public class fcfsframe extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
 
+        jTextField2.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
         jTextField2.setText("0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -276,6 +218,7 @@ public class fcfsframe extends javax.swing.JFrame {
         int curr=0;
         int i=0;
         int j=0;
+        int lasti=0;
         int temp1=0;
         int temp2=0;
         
@@ -283,9 +226,15 @@ public class fcfsframe extends javax.swing.JFrame {
         double wt=0;
          String s;
         
+         void stop(Timer timer){
+             timer.stop();
+         }
+         
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        DecimalFormat df = new DecimalFormat("####.###");
         jButton1.setEnabled(false);
+        
         curr=0;
         temp1=0;
         temp2=0;
@@ -297,32 +246,69 @@ public class fcfsframe extends javax.swing.JFrame {
             id.add((String) jTable1.getValueAt(i, 0));
             //System.out.println("arr: "+arrivalTime.get(i));
         }
-        if(curr<=arrivalTime.get(i)){
+        if(arrivalTime.get(i)<=curr){
             temp1=burstTime.get(i);
             temp2=0;
             s=id.get(i);
             finished.add(temp2);
             finid.add(s);
             i++;
+            j++;
+        }else{
+            temp1=arrivalTime.get(i);
+            temp2=0;
+            finished.add(temp2);
+            finid.add("-1");
+            j++;
         }
         
-        Timer timer = new Timer(1000,new ActionListener(){
+        final Timer timer = new Timer(1000,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("curr: "+curr);
                 curr++;
                 temp1--;
                 temp2++;
                 if(temp1>=0){
-                    finished.set(i-1, temp2);
+                    finished.set(j-1, temp2);
                     can.add(finished, finid);
                 }
-                if(temp1<=0&&i<arrivalTime.size()&&arrivalTime.get(i)<=curr){
+                if(temp1==0&&lasti!=i){
+                    if(i>0){
+                            double te=curr-arrivalTime.get(i-1);
+                            tt+=te;
+                            wt+=(te-burstTime.get(i-1));
+                            System.out.println("tt: "+tt+" wt: "+wt);
+                            jTextField1.setText(df.format(tt/(i)).toString());
+                            jTextField2.setText(df.format(wt/(i)).toString());
+                        }
+                }
+                
+                
+                if(temp1<=0&&i<arrivalTime.size()){
+                    
+                    
+                    if(arrivalTime.get(i)<=curr){
                     temp1=burstTime.get(i);
                     temp2=0;
                     s=id.get(i);
                     finished.add(temp2);
                     finid.add(s);
+                    lasti=i;
                     i++;
+                    j++;
+                    }else{
+                        System.out.println("asdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        temp1=arrivalTime.get(i)-curr;
+                        temp2=0;
+                        finished.add(temp2);
+                        finid.add("-1");
+                        j++;
+                    }
+                }else if(temp1==0&&i>=arrivalTime.size()){
+                    jButton1.setEnabled(true);
+                    ((Timer)e.getSource()).stop();
+                }else{
                 }
                
             }
@@ -330,7 +316,12 @@ public class fcfsframe extends javax.swing.JFrame {
         });
         
         timer.start();
-     this.setEnabled(true);
+        //while(true){
+           // if(i>=arrivalTime.size()-1){
+                
+            //}
+        //}
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
